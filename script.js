@@ -144,14 +144,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Add both mouse and touch event listeners
     clockFace.addEventListener('mousedown', handleStart);
-    clockFace.addEventListener('touchstart', handleStart, { passive: false });
     
-    // Prevent default touch behavior to avoid scrolling/zooming while dragging
-    clockFace.addEventListener('touchmove', (e) => {
+    // Enhanced touch event handling
+    clockFace.addEventListener('touchstart', (e) => {
         if (e.target === hourHand || e.target === minuteHand) {
+            e.preventDefault();
+            handleStart(e);
+        }
+    }, { passive: false });
+    
+    // Prevent any touchmove on the document while dragging
+    document.addEventListener('touchmove', (e) => {
+        if (e.target === hourHand || e.target === minuteHand || 
+            hourHand.contains(e.target) || minuteHand.contains(e.target)) {
             e.preventDefault();
         }
     }, { passive: false });
+    
+    // Prevent context menu on long press
+    clockFace.addEventListener('contextmenu', (e) => {
+        if (e.target === hourHand || e.target === minuteHand) {
+            e.preventDefault();
+        }
+    });
 
     setInitialTime();
 });
