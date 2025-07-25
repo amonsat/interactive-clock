@@ -41,23 +41,51 @@ body {
     bottom: 50%;
     left: 50%;
     background: #4CAF50;
-    border-radius: 10px;
+    border-radius: 50%;
     transform-origin: bottom;
     cursor: pointer;
-    transition: transform 0.3s ease-out;
+    transition: transform 0.3s ease-out, background-color 0.2s;
+    /* Large touch target */
+    width: 60px;
+    height: 60px;
+    margin: -30px 0 0 -30px;
+    opacity: 0.2;
+    z-index: 10;
+    /* Center the actual hand inside the touch area */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
 }
 
-.hour-hand {
+/* Visual representation of the hands */
+.hour-hand::after, .minute-hand::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #4CAF50;
+    border-radius: 10px;
+}
+
+.hour-hand::after {
     width: 6px;
     height: 100px;
     margin-left: -3px;
+}
+
+.minute-hand::after {
+    width: 4px;
+    height: 150px;
+    margin-left: -2px;
+}
+
+/* Original hand styles are now in the ::after pseudo-elements */
+.hour-hand {
     z-index: 3;
 }
 
 .minute-hand {
-    width: 4px;
-    height: 150px;
-    margin-left: -2px;
     z-index: 2;
 }
 

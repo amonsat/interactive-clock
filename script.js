@@ -142,12 +142,33 @@ document.addEventListener('DOMContentLoaded', () => {
         updateDigitalTime();
     });
 
-    // Add both mouse and touch event listeners
+    // Function to check if touch is near a clock hand
+    function isTouchNearHand(touchX, touchY, hand) {
+        const rect = hand.getBoundingClientRect();
+        const handX = rect.left + rect.width / 2;
+        const handY = rect.top + rect.height / 2;
+        const distance = Math.sqrt(
+            Math.pow(touchX - handX, 2) + 
+            Math.pow(touchY - handY, 2)
+        );
+        // Consider touch within 50px of the hand as valid
+        return distance < 50;
+    }
+
+    // Add mouse and touch event listeners
     clockFace.addEventListener('mousedown', handleStart);
     
-    // Enhanced touch event handling
+    // Enhanced touch event handling with better touch detection
     clockFace.addEventListener('touchstart', (e) => {
-        if (e.target === hourHand || e.target === minuteHand) {
+        const touch = e.touches[0];
+        const touchX = touch.clientX;
+        const touchY = touch.clientY;
+        
+        // Check which hand is being touched
+        if (isTouchNearHand(touchX, touchY, hourHand)) {
+            e.preventDefault();
+            handleStart(e);
+        } else if (isTouchNearHand(touchX, touchY, minuteHand)) {
             e.preventDefault();
             handleStart(e);
         }
@@ -155,9 +176,16 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Prevent any touchmove on the document while dragging
     document.addEventListener('touchmove', (e) => {
-        if (e.target === hourHand || e.target === minuteHand || 
-            hourHand.contains(e.target) || minuteHand.contains(e.target)) {
-            e.preventDefault();
+        // Only prevent default if we're actually dragging a hand
+        if (e.touches.length === 1) {
+            const touch = e.touches[0];
+            const touchX = touch.clientX;
+            const touchY = touch.clientY;
+            
+            if (isTouchNearHand(touchX, touchY, hourHand) || 
+                isTouchNearHand(touchX, touchY, minuteHand)) {
+                e.preventDefault();
+            }
         }
     }, { passive: false });
     
@@ -167,6 +195,28 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
         }
     });
+    
+    // Add visual feedback on touch
+    function addTouchFeedback(hand) {
+        hand.style.opacity = '0.4';
+        hand.style.transition = 'opacity 0.2s';
+    }
+    
+    function removeTouchFeedback(hand) {
+        hand.style.opacity = '0.2';
+    }
+    
+    // Add touch feedback
+    clockFace.addEventListener('touchstart', (e) => {
+        if (e.target === hourHand || e.target === minuteHand) {
+            addTouchFeedback(e.target);
+        }
+    }, { passive: true });
+    
+    document.addEventListener('touchend', (e) => {
+        removeTouchFeedback(hourHand);
+        removeTouchFeedback(minuteHand);
+    }, { passive: true });
 
     setInitialTime();
 });
