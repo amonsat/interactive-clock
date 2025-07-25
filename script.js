@@ -48,15 +48,53 @@ document.addEventListener('DOMContentLoaded', () => {
         digitalTime.textContent = is24HourFormat ? `${formattedHours}:${formattedMinutes}` : `${displayHours}:${formattedMinutes}${period}`;
     }
 
-    function handleMouseDown(e) {
-        if (e.target === hourHand || e.target === minuteHand) {
-            document.body.style.cursor = 'grabbing';
-            const handler = (moveEvent) => handleMouseMove(moveEvent, e.target.id);
-            document.addEventListener('mousemove', handler);
-            document.addEventListener('mouseup', () => {
-                document.body.style.cursor = 'default';
-                document.removeEventListener('mousemove', handler);
-            }, { once: true });
+    function handleStart(e) {
+        e.preventDefault();
+        const target = e.target === hourHand || e.target === minuteHand ? e.target : null;
+        if (!target) return;
+        
+        document.body.style.cursor = 'grabbing';
+        
+        const moveHandler = (moveEvent) => {
+            const clientX = moveEvent.clientX || (moveEvent.touches && moveEvent.touches[0].clientX);
+            const clientY = moveEvent.clientY || (moveEvent.touches && moveEvent.touches[0].clientY);
+            
+            if (clientX && clientY) {
+                const moveEventWithCoords = new MouseEvent('mousemove', {
+                    clientX,
+                    clientY,
+                    bubbles: true,
+                    cancelable: true
+                });
+                handleMouseMove(moveEventWithCoords, target.id);
+            }
+        };
+        
+        const endHandler = () => {
+            document.body.style.cursor = 'default';
+            document.removeEventListener('mousemove', moveHandler);
+            document.removeEventListener('touchmove', moveHandler);
+            document.removeEventListener('mouseup', endHandler);
+            document.removeEventListener('touchend', endHandler);
+        };
+        
+        document.addEventListener('mousemove', moveHandler);
+        document.addEventListener('touchmove', moveHandler, { passive: false });
+        document.addEventListener('mouseup', endHandler, { once: true });
+        document.addEventListener('touchend', endHandler, { once: true });
+        
+        // Trigger initial move to update position immediately
+        const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+        const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+        
+        if (clientX && clientY) {
+            const initialMove = new MouseEvent('mousemove', {
+                clientX,
+                clientY,
+                bubbles: true,
+                cancelable: true
+            });
+            handleMouseMove(initialMove, target.id);
         }
     }
 
@@ -104,7 +142,16 @@ document.addEventListener('DOMContentLoaded', () => {
         updateDigitalTime();
     });
 
-    clockFace.addEventListener('mousedown', handleMouseDown);
+    // Add both mouse and touch event listeners
+    clockFace.addEventListener('mousedown', handleStart);
+    clockFace.addEventListener('touchstart', handleStart, { passive: false });
+    
+    // Prevent default touch behavior to avoid scrolling/zooming while dragging
+    clockFace.addEventListener('touchmove', (e) => {
+        if (e.target === hourHand || e.target === minuteHand) {
+            e.preventDefault();
+        }
+    }, { passive: false });
 
     setInitialTime();
 });
