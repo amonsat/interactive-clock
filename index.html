@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Clock</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="clock-container">
+            <div class="clock-face">
+                <div class="number number1">1</div>
+                <div class="number number2">2</div>
+                <div class="number number3">3</div>
+                <div class="number number4">4</div>
+                <div class="number number5">5</div>
+                <div class="number number6">6</div>
+                <div class="number number7">7</div>
+                <div class="number number8">8</div>
+                <div class="number number9">9</div>
+                <div class="number number10">10</div>
+                <div class="number number11">11</div>
+                <div class="number number12">12</div>
+                <div class="hour-hand" id="hourHand"></div>
+                <div class="minute-hand" id="minuteHand"></div>
+            </div>
+        </div>
+        <div class="digital-time" id="digitalTime">12:00</div>
+        <div class="toggle-container">
+            <label class="switch">
+                <input type="checkbox" id="formatToggle">
+                <span class="slider"></span>
+            </label>
+            <span>24-Hour Format</span>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

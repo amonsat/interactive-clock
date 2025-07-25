@@ -1,0 +1,155 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background: linear-gradient(135deg, #87CEEB, #E6E6FA);
+    font-family: 'Arial', sans-serif;
+}
+
+.container {
+    text-align: center;
+}
+
+.clock-container {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    margin: 20px auto;
+}
+
+.clock-face {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.hour-hand, .minute-hand {
+    position: absolute;
+    bottom: 50%;
+    left: 50%;
+    background: #4CAF50;
+    border-radius: 10px;
+    transform-origin: bottom;
+    cursor: pointer;
+    transition: transform 0.3s ease-out;
+}
+
+.hour-hand {
+    width: 6px;
+    height: 100px;
+    margin-left: -3px;
+    z-index: 3;
+}
+
+.minute-hand {
+    width: 4px;
+    height: 150px;
+    margin-left: -2px;
+    z-index: 2;
+}
+
+.digital-time {
+    font-size: 2em;
+    font-weight: bold;
+    color: #333;
+    margin-top: 20px;
+}
+
+.toggle-container {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+    margin-right: 10px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #4CAF50;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.number {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #333;
+}
+
+.number1 { transform: rotate(30deg); }
+.number1 div { transform: rotate(-30deg); }
+.number2 { transform: rotate(60deg); }
+.number2 div { transform: rotate(-60deg); }
+.number3 { transform: rotate(90deg); }
+.number3 div { transform: rotate(-90deg); }
+.number4 { transform: rotate(120deg); }
+.number4 div { transform: rotate(-120deg); }
+.number5 { transform: rotate(150deg); }
+.number5 div { transform: rotate(-150deg); }
+.number6 { transform: rotate(180deg); }
+.number6 div { transform: rotate(-180deg); }
+.number7 { transform: rotate(210deg); }
+.number7 div { transform: rotate(-210deg); }
+.number8 { transform: rotate(240deg); }
+.number8 div { transform: rotate(-240deg); }
+.number9 { transform: rotate(270deg); }
+.number9 div { transform: rotate(-270deg); }
+.number10 { transform: rotate(300deg); }
+.number10 div { transform: rotate(-300deg); }
+.number11 { transform: rotate(330deg); }
+.number11 div { transform: rotate(-330deg); }
+.number12 { transform: rotate(360deg); }
+.number12 div { transform: rotate(-360deg); }
+
+.number div {
+    padding-top: 10px;
+}
+
+/* Numbers on the clock face */
